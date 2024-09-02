@@ -91,7 +91,12 @@ void Mobile_command::control(float _vx, float _vy, float _wz) {
   }
 
   for (int i = 0; i < NUM_MOTORS; i++) {
-    Mx[i]->set_duty(cmd_ux[i]);
+    if(i <= 1)
+    {Mx[i]->set_duty(cmd_ux[i]);
+    }
+    else{
+      Mx[i]->set_duty(-1*cmd_ux[i]);
+    }
   }
 }
 
