@@ -58,7 +58,7 @@ void control_loop(void *pv) {
   while (true) {
     static int counter = 0;
     if (xSemaphoreTake(control_sem, 0) == pdTRUE) {
-      // Mobile.control(vx, vy, vw);
+      Mobile.control(vx, vy, vw);
       counter = (counter + 1) % 10;
       if (!counter) xSemaphoreGive(update_sem);
     }
@@ -114,7 +114,7 @@ void loop() {
       vw = 0;
     } else if (flag == 1) {
       flag = 2;
-      vx = 1;
+      vx = 0.25;
       vy = 0;
       vw = 0;
     } else if (flag == 2) {
@@ -125,7 +125,7 @@ void loop() {
     } else if (flag == 3) {
       flag = 4;
       vx = 0;
-      vy = 1;
+      vy = 0.25;
       vw = 0;
     } else if (flag == 4) {
       flag = 5;
@@ -136,9 +136,21 @@ void loop() {
       flag = 6;
       vx = 0;
       vy = 0;
-      vw = 1;
+      vw = 0.25;
     } else if (flag == 6) {
-      flag = 6;
+      flag = 7;
+      vx = 0;
+      vy = 0;
+      vw = 0;
+    }
+    else if (flag == 7) {
+      flag = 8;
+      vx = 0;
+      vy = 0.25;
+      vw = 0.25;
+    }
+    else if (flag == 8) {
+      flag = 8;
       vx = 0;
       vy = 0;
       vw = 0;

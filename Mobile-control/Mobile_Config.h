@@ -21,23 +21,24 @@
 
 /*-----Config Motor Start-----*/
 #define MOTOR_1_PWM_PIN 39
-#define MOTOR_2_PWM_PIN 42
-#define MOTOR_3_PWM_PIN 1
-#define MOTOR_4_PWM_PIN 4
+#define MOTOR_2_PWM_PIN 4
+#define MOTOR_3_PWM_PIN 42
+#define MOTOR_4_PWM_PIN 1
 
 #define MOTOR_1_DIR_PIN 40
-#define MOTOR_2_DIR_PIN 41
-#define MOTOR_3_DIR_PIN 2
-#define MOTOR_4_DIR_PIN 5
+#define MOTOR_2_DIR_PIN 5
+#define MOTOR_3_DIR_PIN 41
+#define MOTOR_4_DIR_PIN 2
 
 #define ENC_1_A_PIN 18
 #define ENC_1_B_PIN 17
-#define ENC_2_A_PIN 33
-#define ENC_2_B_PIN 34
-#define ENC_3_A_PIN 36
-#define ENC_3_B_PIN 35
-#define ENC_4_A_PIN 37
-#define ENC_4_B_PIN 38
+#define ENC_2_A_PIN 37
+#define ENC_2_B_PIN 38
+#define ENC_3_A_PIN 34
+#define ENC_3_B_PIN 33
+#define ENC_4_A_PIN 35
+#define ENC_4_B_PIN 36
+
 
 #define ENC_1_PPR 2048.0 * 4.0
 #define ENC_2_PPR 2048.0 * 4.0
