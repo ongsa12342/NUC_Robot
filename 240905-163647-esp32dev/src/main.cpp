@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include "Mobile_command.h"
 void timer0_callback();
 void control_loop(void *pv);
@@ -40,6 +42,7 @@ void setup() {
                           &control_task,
                           0);
 
+  
   // htim0 = timerBegin(1000000);
   // timerAttachInterrupt(htim0, &timer0_callback);
   // timerAlarm(htim0, 1000, true, 0);
@@ -58,12 +61,14 @@ void control_loop(void *pv) {
   while (true) {
     static int counter = 0;
     if (xSemaphoreTake(control_sem, 0) == pdTRUE) {
-      Mobile.control(vx, vy, vw);
+      // Mobile.control(vx, vy, vw);
       counter = (counter + 1) % 10;
       if (!counter) xSemaphoreGive(update_sem);
     }
   }
 }
+
+
 
 void loop() {
   uint64_t time = micros();
@@ -144,4 +149,18 @@ void loop() {
       vw = 0;
     }
   }
+}
+
+extern "C" void app_main(void)
+{
+    // Initialize Arduino environment within ESP-IDF
+    initArduino();
+
+    //Run Arduino setup function
+    setup();
+
+    // Main loop, similar to Arduino's loop
+    while (true) {
+        loop();
+    }
 }

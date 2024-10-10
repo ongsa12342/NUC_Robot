@@ -20,7 +20,8 @@ For example, see a structure of the following two libraries `Foo` and `Bar`:
 |  |--Foo
 |  |  |- Foo.c
 |  |  |- Foo.h
-|  |
+|  |4. After successful download, it will automatically enter the serial monitor, and you can see the corresponding information output from the chip and prompt to reboot after 10s.
+
 |  |- README --> THIS FILE
 |
 |- platformio.ini

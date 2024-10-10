@@ -2,7 +2,7 @@
 #define _QEI_H__
 
 // #include <driver/pulse_cnt.h>
-#include "/home/aitthikit/.platformio/packages/framework-espidf/components/esp_driver_pcnt/include/driver/pulse_cnt.h"
+#include "/home/tadtawan/.platformio/packages/framework-espidf/components/esp_driver_pcnt/include/driver/pulse_cnt.h"
 
 class QEI {
 private:

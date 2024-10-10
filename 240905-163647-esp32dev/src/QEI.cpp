@@ -1,7 +1,9 @@
 #include "esp32-hal-gpio.h"
 // #include "driver/pulse_cnt.h"
-#include "/home/aitthikit/.platformio/packages/framework-espidf/components/esp_driver_pcnt/include/driver/pulse_cnt.h"
+#include "/home/tadtawan/.platformio/packages/framework-espidf/components/esp_driver_pcnt/include/driver/pulse_cnt.h"
 #include "QEI.h"
+
+
 
 QEI ::QEI(int encA, int encB, float ppr, int limit, uint32_t filt)
   : encA_pin(encA), encB_pin(encB), pcnt_limit(limit), filter_ns(filt) {
