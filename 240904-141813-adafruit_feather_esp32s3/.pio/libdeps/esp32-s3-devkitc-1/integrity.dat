@@ -1,0 +1,4 @@
+SPI
+Wire
+adafruit/Adafruit BNO08x@^1.1.1
+https://github.com/micro-ROS/micro_ros_platformio
