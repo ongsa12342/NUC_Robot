@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "istream": "cpp",
-        "mutex": "cpp",
-        "ostream": "cpp",
-        "core": "cpp"
-    }
-}
