@@ -1,0 +1,7 @@
+setup.py
+nuc_collector/__init__.py
+nuc_collector/dummy_module.py
+nuc_collector.egg-info/PKG-INFO
+nuc_collector.egg-info/SOURCES.txt
+nuc_collector.egg-info/dependency_links.txt
+nuc_collector.egg-info/top_level.txt

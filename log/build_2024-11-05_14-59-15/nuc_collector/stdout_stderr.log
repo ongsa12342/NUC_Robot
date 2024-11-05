@@ -1,0 +1,80 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.10 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found rclcpp: 16.0.10 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+-- Found FastRTPS: /opt/ros/humble/include  
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found rclpy: 3.3.14 (/opt/ros/humble/share/rclpy/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/papinwit/nucrobot_ws/build/nuc_collector
+[ 50%] [32mBuilding CXX object CMakeFiles/cpp_node_test.dir/src/cpp_node.cpp.o[0m
+[ 50%] Built target ament_cmake_python_copy_nuc_collector
+[100%] [32m[1mLinking CXX executable cpp_node_test[0m
+running egg_info
+creating nuc_collector.egg-info
+writing nuc_collector.egg-info/PKG-INFO
+writing dependency_links to nuc_collector.egg-info/dependency_links.txt
+writing top-level names to nuc_collector.egg-info/top_level.txt
+writing manifest file 'nuc_collector.egg-info/SOURCES.txt'
+reading manifest file 'nuc_collector.egg-info/SOURCES.txt'
+writing manifest file 'nuc_collector.egg-info/SOURCES.txt'
+[100%] Built target ament_cmake_python_build_nuc_collector_egg
+[100%] Built target cpp_node_test
+-- Install configuration: ""
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/pythonpath.sh
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/pythonpath.dsv
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector-0.0.0-py3.10.egg-info
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector-0.0.0-py3.10.egg-info/top_level.txt
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector-0.0.0-py3.10.egg-info/PKG-INFO
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector-0.0.0-py3.10.egg-info/SOURCES.txt
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector-0.0.0-py3.10.egg-info/dependency_links.txt
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector/__init__.py
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector/dummy_module.py
+Listing '/home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector'...
+Compiling '/home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector/__init__.py'...
+Compiling '/home/papinwit/nucrobot_ws/install/nuc_collector/local/lib/python3.10/dist-packages/nuc_collector/dummy_module.py'...
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/lib/nuc_collector/dummy_script.py
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/lib/nuc_collector/cpp_node_test
+-- Set runtime path of "/home/papinwit/nucrobot_ws/install/nuc_collector/lib/nuc_collector/cpp_node_test" to ""
+-- Up-to-date: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/ament_index/resource_index/package_run_dependencies/nuc_collector
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/ament_index/resource_index/parent_prefix_path/nuc_collector
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/ament_prefix_path.sh
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/ament_prefix_path.dsv
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/path.sh
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/environment/path.dsv
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/local_setup.bash
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/local_setup.sh
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/local_setup.zsh
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/local_setup.dsv
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/package.dsv
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/ament_index/resource_index/packages/nuc_collector
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/cmake/nuc_collectorConfig.cmake
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/cmake/nuc_collectorConfig-version.cmake
+-- Installing: /home/papinwit/nucrobot_ws/install/nuc_collector/share/nuc_collector/package.xml

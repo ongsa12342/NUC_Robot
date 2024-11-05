@@ -1,0 +1,3 @@
+source;share/nuc_collector/environment/ament_prefix_path.sh
+source;share/nuc_collector/environment/path.sh
+source;share/nuc_collector/environment/pythonpath.sh
