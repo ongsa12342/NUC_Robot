@@ -39,3 +39,8 @@ To open RViz with a preset configuration for the Unitree LiDAR:
 ```
 rviz2 -d src/unitree_lidar_ros2/rviz/view.rviz
 ```
+
+## Running Lidar SLAM
+```
+ros2 launch lidarslam lidarslam.launch.py
+```
