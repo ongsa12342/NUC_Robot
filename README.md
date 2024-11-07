@@ -44,3 +44,7 @@ rviz2 -d src/unitree_lidar_ros2/rviz/view.rviz
 ```
 ros2 launch lidarslam lidarslam.launch.py
 ```
+run bag file
+```
+ros2 bag play data
+```
