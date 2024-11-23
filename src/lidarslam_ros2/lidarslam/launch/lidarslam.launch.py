@@ -25,14 +25,16 @@ def generate_launch_description():
         package='scanmatcher',
         executable='scanmatcher_node',
         parameters=[main_param_dir],
-        remappings=[('/input_cloud','/unilidar/cloud'), ('/imu','/unilidar/imu')],
+        remappings=[('/input_cloud','/unilidar/cloud'), ('/imu','/imu/filtered_LPS')],
+        # remappings=[('/input_cloud','/unilidar/cloud'), ('/imu','/unilidar/imu')],
+        # remappings=[('/input_cloud','/unilidar/cloud')],
         output='screen'
         )
 
     tf = launch_ros.actions.Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0','0','0','0','0','0','1','base_link','unilidar_lidar']
+        arguments=['0','0','0','0','0','-0.2','1','base_link','unilidar_lidar']
         )
 
 

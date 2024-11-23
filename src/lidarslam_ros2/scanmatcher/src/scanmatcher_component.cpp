@@ -516,7 +516,9 @@ void ScanMatcherComponent::receiveImu(const sensor_msgs::msg::Imu msg)
   tf2::Matrix3x3(orientation).getRPY(roll, pitch, yaw);
   float acc_x = static_cast<float>(msg.linear_acceleration.x) + sin(pitch) * 9.81;
   float acc_y = static_cast<float>(msg.linear_acceleration.y) - cos(pitch) * sin(roll) * 9.81;
-  float acc_z = static_cast<float>(msg.linear_acceleration.z) - cos(pitch) * cos(roll) * 9.81;
+  // float acc_z = static_cast<float>(msg.linear_acceleration.z) - cos(pitch) * cos(roll) * 9.81;
+  float acc_z = static_cast<float>(0.0);
+  //BIG edit
 
   Eigen::Vector3f angular_velo{
     static_cast<float>(msg.angular_velocity.x),
@@ -531,7 +533,6 @@ void ScanMatcherComponent::receiveImu(const sensor_msgs::msg::Imu msg)
   double imu_time = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9;
 
   lidar_undistortion_.getImu(angular_velo, acc, quat, imu_time);
-
 }
 
 void ScanMatcherComponent::publishMap(const lidarslam_msgs::msg::MapArray & map_array_msg , const std::string & map_frame_id)

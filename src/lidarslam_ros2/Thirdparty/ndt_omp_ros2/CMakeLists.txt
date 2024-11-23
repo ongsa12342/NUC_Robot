@@ -95,6 +95,11 @@ install(
   DESTINATION include
 )
 
+install(DIRECTORY
+  # add directories here
+  launch
+  DESTINATION share/${PROJECT_NAME})
+
 ament_export_dependencies(rclcpp)
 ament_export_include_directories(include)
 
