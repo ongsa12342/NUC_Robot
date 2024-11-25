@@ -9,6 +9,9 @@ def generate_launch_description():
     ekf_launch_path = os.path.join(
         get_package_share_directory('robot_localization'), 'launch', 'ekf.launch.py'
     )
+    point_to_laser_launch_path = os.path.join(
+        get_package_share_directory('convert_odom'), 'launch', 'custom_pointcloud_to_laserscan_launch.py'
+    )
 
     node1 = Node(
         package='convert_odom',
@@ -36,9 +39,34 @@ def generate_launch_description():
         name='draw_path',
         output='screen',
     )
+    
+    tf = Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='static_transform_publisher',
+            arguments=[
+                '0', '0', '0',  # x, y, z
+                '0', '0', '0', '1',  # Quaternion qx, qy, qz, qw
+                'map',  # Parent frame
+                'odom'  # Child frame
+            ]
+    )
+    
+    robot_state = Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publish',
+           parameters=[
+                {'robot_description': open('/home/farao/Desktop/urdf/nuc.urdf').read()}
+            ],
+    )
+    
+    point_to_laser_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(point_to_laser_launch_path)
+    )
 
     ekf_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(ekf_launch_path)
     )
     
-    return LaunchDescription([ekf_launch, node1, node2,node4])
+    return LaunchDescription([ekf_launch, node1, node2,node4,tf,point_to_laser_launch])

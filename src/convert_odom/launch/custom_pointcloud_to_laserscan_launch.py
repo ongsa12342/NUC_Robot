@@ -32,7 +32,7 @@ def generate_launch_description():
             executable='pointcloud_to_laserscan_node',
             remappings=[
                 ('cloud_in', [LaunchConfiguration(variable_name='scanner'), '/cloud_fixed']),
-                ('scan', [LaunchConfiguration(variable_name='scanner'), '/scan'])
+                # ('scan', [LaunchConfiguration(variable_name='scanner'), '/scan'])
             ],
             parameters=[{
                 'target_frame': 'unilidar_lidar',  # Frame in which the scan will be published

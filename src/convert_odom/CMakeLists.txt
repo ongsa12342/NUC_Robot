@@ -32,6 +32,7 @@ install(PROGRAMS
   scripts/accel_filter.py
   scripts/convert_odom_pos.py
   scripts/time_sync.py
+  scripts/teleop_encode.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

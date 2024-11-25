@@ -66,7 +66,7 @@ def generate_launch_description():
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)
     ld.add_action(convert_launch)
-    ld.add_action(point_to_laser_launch)
+    # ld.add_action(point_to_laser_launch)
     ld.add_action(start_rviz_node)
 
     return ld
