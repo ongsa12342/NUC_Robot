@@ -48,3 +48,12 @@ run bag file
 ```
 ros2 bag play data
 ```
+
+
+
+# Nav2 Launch 
+```
+ros2 launch convert_odom simple.launch.py 
+
+ros2 launch convert_odom nav2.launch.py 
+```
