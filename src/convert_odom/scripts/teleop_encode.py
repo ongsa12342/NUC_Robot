@@ -19,12 +19,10 @@ class TeleEncoderNode(Node):
         self.velo[0] = msg.linear.x
         self.velo[1] = msg.linear.y
         self.velo[2] = msg.angular.z
-        # self.get_logger().info(f'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa {self.velo[0]}')
     def timer_callback(self):
         # pass
         msg = Float32MultiArray()
         msg.data = self.velo.tolist()
-        # self.get_logger(f'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa {msg}')
         self.pub_vel.publish(msg)
 
 def main(args=None):

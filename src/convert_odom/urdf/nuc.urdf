@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<robot name="four_wheel_robot_with_lidar">
+
+  <!-- Define Materials -->
+  <material name="blue">
+    <color rgba="0 0 1 1"/> <!-- Blue color -->
+  </material>
+  <material name="orange">
+    <color rgba="1.0 0.7 0.3 1.0"/> <!-- Orange color -->
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/> <!-- Black color -->
+  </material>
+  <material name="gray">
+    <color rgba="0.2 0.2 0.2 1.0"/> <!-- Gray color -->
+  </material>
+
+  <!-- Define the Map Link -->
+  <link name="map"/>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.35 0.75 0.27"/> <!-- Adjust dimensions: Length x Width x Height -->
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <!-- Lidar Link -->
+  <link name="lidar_imu_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.035" length="0.06"/> <!-- lidar_imu dimensions -->
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+  
+  <joint name="lidar_imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_imu_link"/>
+    <origin xyz="0 0 0.335" rpy="0 0 -0.2"/> <!-- Adjust lidar_imu position (centered on base) -->
+  </joint>
+
+  <!-- Front Left Wheel -->
+  <link name="front_left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.07" length="0.12"/> <!-- Adjust radius and thickness -->
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/> <!-- Adjust x, y, z positions -->
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="front_left_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_left_wheel"/>
+    <origin xyz="0.24 0.305 -0.065" rpy="0 0 0"/> <!-- Adjust x, y, z positions -->
+    <axis xyz="0 1 0"/> <!-- Rotational axis -->
+  </joint>
+
+  <!-- Front Right Wheel -->
+  <link name="front_right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.07" length="0.12"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/> <!-- Adjust x, y, z positions -->
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="front_right_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_right_wheel"/>
+    <origin xyz="-0.24 0.305 -0.065" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Rear Left Wheel -->
+  <link name="rear_left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.07" length="0.12"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/> <!-- Adjust x, y, z positions -->
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="rear_left_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_left_wheel"/>
+    <origin xyz="0.24 -0.305 -0.065" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Rear Right Wheel -->
+  <link name="rear_right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.07" length="0.12"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/> <!-- Adjust x, y, z positions -->
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <joint name="rear_right_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_right_wheel"/>
+    <origin xyz="-0.24 -0.305 -0.065" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- Map to Base Link Joint -->
+  <joint name="map_to_base_link" type="fixed">
+    <parent link="map"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.135" rpy="0 0 -1.57"/> <!-- Adjust as needed -->
+  </joint>
+
+</robot>

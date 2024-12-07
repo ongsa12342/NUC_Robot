@@ -8,36 +8,30 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     ekf_launch_path = os.path.join(
         get_package_share_directory('robot_localization'), 'launch', 'ekf.launch.py'
-    )
+        )
     point_to_laser_launch_path = os.path.join(
         get_package_share_directory('convert_odom'), 'launch', 'custom_pointcloud_to_laserscan_launch.py'
-    )
-
-    node1 = Node(
+        )
+    urdf_path = os.path.join(get_package_share_directory('convert_odom'), 'urdf', 'nuc.urdf')
+    
+    Filter_LP_node = Node(
         package='convert_odom',
         executable='accel_filter.py',
         name='accel_filter',
         output='screen',
     )
 
-    node2 = Node(
+    convert_odom_type_node = Node(
         package='convert_odom',
         executable='convert_array_odom.py',
         name='convert_array_odom',
         output='screen',
         # parameters=[{'use_sim_time': True}],  # Enable sim time
     )
-    node4 = Node(
+    time_sync_node = Node(
     package='convert_odom',
     executable='time_sync.py',
     name='Synctime',
-    )
-    
-    node3 = Node(
-        package='convert_odom',
-        executable='drw_path.py',
-        name='draw_path',
-        output='screen',
     )
     
     tf = Node(
@@ -52,15 +46,6 @@ def generate_launch_description():
             ]
     )
     
-    robot_state = Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            name='robot_state_publish',
-           parameters=[
-                {'robot_description': open('/home/farao/Desktop/urdf/nuc.urdf').read()}
-            ],
-    )
-    
     point_to_laser_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(point_to_laser_launch_path)
     )
@@ -69,4 +54,4 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(ekf_launch_path)
     )
     
-    return LaunchDescription([ekf_launch, node1, node2,node4,tf,point_to_laser_launch])
+    return LaunchDescription([ekf_launch, Filter_LP_node, convert_odom_type_node, time_sync_node,tf,point_to_laser_launch])

@@ -73,8 +73,6 @@ class LowPassFilterNode(Node):
         self.filtered_msg.orientation_covariance = msg.orientation_covariance
         self.filtered_msg.angular_velocity_covariance = msg.angular_velocity_covariance
         self.filtered_msg.linear_acceleration_covariance = msg.linear_acceleration_covariance
-
-        # Publish the filtered IMU message
         
     def timer_callback(self):
         self.publisher_.publish(self.filtered_msg)

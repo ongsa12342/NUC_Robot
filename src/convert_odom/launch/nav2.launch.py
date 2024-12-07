@@ -1,19 +1,3 @@
-# Copyright (c) 2018 Intel Corporation
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""This is all-in-one launch script intended for use by nav2 developers."""
-
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -27,9 +11,14 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    # Get the launch directory
+    # Get share directory
     bringup_dir = get_package_share_directory('nav2_bringup')
+    conv_pkg  = get_package_share_directory('convert_odom')
+    
     launch_dir = os.path.join(bringup_dir, 'launch')
+    map_file_path = os.path.join(conv_pkg, 'config', 'last_map2.yaml')
+    nav2_file_path = os.path.join(conv_pkg,'config', 'nav2.yaml')
+    rviz_file_path = os.path.join(conv_pkg,'config', 'nav2_rviz.rviz')
 
     # Create the launch configuration variables
     slam = LaunchConfiguration('slam')
@@ -58,12 +47,7 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     robot_sdf = LaunchConfiguration('robot_sdf')
 
-    # Map fully qualified names to relative ones so the node's namespace can be prepended.
-    # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
-    # https://github.com/ros/geometry2/issues/32
-    # https://github.com/ros/robot_state_publisher/pull/30
-    # TODO(orduno) Substitute with `PushNodeRemapping`
-    #              https://github.com/ros2/launch_ros/issues/56
+    # Remapping
     remappings = [('/tf', 'tf'),
                   ('/tf_static', 'tf_static')]
 
@@ -85,7 +69,7 @@ def generate_launch_description():
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
-        default_value='/home/farao/Desktop/last_map1.yaml',
+        default_value=map_file_path,
         description='Full path to map file to load')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -95,7 +79,7 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value='/home/farao/Desktop/NUC_Robot/src/convert_odom/config/nav2.yaml',
+        default_value=nav2_file_path,
         description='Full path to the ROS2 parameters file to use for all launched nodes')
 
     declare_autostart_cmd = DeclareLaunchArgument(
@@ -112,9 +96,7 @@ def generate_launch_description():
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
         'rviz_config_file',
-        # default_value=os.path.join(
-        #     bringup_dir, 'rviz', 'nav2_default_view.rviz'),
-        default_value='/home/farao/Desktop/NUC_Robot/src/convert_odom/config/nav2_rviz.rviz',
+        default_value=rviz_file_path,
         description='Full path to the RVIZ config file to use')
 
     declare_use_simulator_cmd = DeclareLaunchArgument(
@@ -137,40 +119,14 @@ def generate_launch_description():
         default_value='True',
         description='Whether to execute gzclient)')
 
-    # declare_world_cmd = DeclareLaunchArgument(
-    #     'world',
-    #     # TODO(orduno) Switch back once ROS argument passing has been fixed upstream
-    #     #              https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/91
-    #     # default_value=os.path.join(get_package_share_directory('turtlebot3_gazebo'),
-    #     # worlds/turtlebot3_worlds/waffle.model')
-    #     default_value=os.path.join(bringup_dir, 'worlds', 'world_only.model'),
-    #     description='Full path to world model file to load')
-
     declare_robot_name_cmd = DeclareLaunchArgument(
         'robot_name',
         default_value='nuc_robot',
         description='name of the robot')
 
-    # declare_robot_sdf_cmd = DeclareLaunchArgument(
-    #     'robot_sdf',
-    #     default_value=os.path.join(bringup_dir, 'worlds', 'waffle.model'),
-    #     description='Full path to robot sdf file to spawn the robot in gazebo')
+    urdf_path = os.path.join(conv_pkg,'urdf', 'nuc.urdf')
 
-    # # Specify the actions
-    # start_gazebo_server_cmd = ExecuteProcess(
-    #     condition=IfCondition(use_simulator),
-    #     cmd=['gzserver', '-s', 'libgazebo_ros_init.so',
-    #          '-s', 'libgazebo_ros_factory.so', world],
-    #     cwd=[launch_dir], output='screen')
-
-    # start_gazebo_client_cmd = ExecuteProcess(
-    #     condition=IfCondition(PythonExpression(
-    #         [use_simulator, ' and not ', headless])),
-    #     cmd=['gzclient'],
-    #     cwd=[launch_dir], output='screen')
-
-    urdf = '/home/farao/Desktop/urdf/nuc.urdf'
-    with open(urdf, 'r') as infp:
+    with open(urdf_path, 'r') as infp:
         robot_description = infp.read()
 
     start_robot_state_publisher_cmd = Node(
@@ -183,18 +139,6 @@ def generate_launch_description():
         parameters=[{'use_sim_time': use_sim_time,
                      'robot_description': robot_description}],
         remappings=remappings)
-
-    # start_gazebo_spawner_cmd = Node(
-    #     package='gazebo_ros',
-    #     executable='spawn_entity.py',
-    #     output='screen',
-    #     arguments=[
-    #         '-entity', robot_name,
-    #         '-file', robot_sdf,
-    #         '-robot_namespace', namespace,
-    #         '-timeout', "180.00",
-    #         '-x', pose['x'], '-y', pose['y'], '-z', pose['z'],
-    #         '-R', pose['R'], '-P', pose['P'], '-Y', pose['Y']])
 
     rviz_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -240,10 +184,6 @@ def generate_launch_description():
     # ld.add_action(declare_robot_sdf_cmd)
     ld.add_action(declare_use_respawn_cmd)
 
-    # Add any conditioned actions
-    # ld.add_action(start_gazebo_server_cmd)
-    # ld.add_action(start_gazebo_client_cmd)
-    # ld.add_action(start_gazebo_spawner_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(start_robot_state_publisher_cmd)

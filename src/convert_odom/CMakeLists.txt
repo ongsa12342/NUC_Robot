@@ -55,6 +55,7 @@ install(DIRECTORY
   # add directories here
   launch
   config
+  urdf
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
