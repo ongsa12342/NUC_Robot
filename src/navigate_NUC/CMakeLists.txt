@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(convert_odom)
+project(navigate_NUC)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -28,11 +28,6 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/dummy_script.py
-  scripts/convert_array_odom.py
-  scripts/accel_filter.py
-  scripts/convert_odom_pos.py
-  scripts/time_sync.py
-  scripts/teleop_encode.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -53,7 +48,11 @@ install(TARGETS
 ################ INSTALL LAUNCH, ETC #################
 install(DIRECTORY
   # add directories here
+  urdf
+  params
+  config
   launch
+  map
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
