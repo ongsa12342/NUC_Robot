@@ -39,6 +39,7 @@ class NUC_Scheduler(Node):
         self.create_service(SetPoseStamped, 'nuc_goal_pose', self.handle_nuc_goal_pose)
         
         self.timer = self.create_timer(100, self.timer_callback) #100 hz
+        self.timer = self.create_timer(1/100, self.timer_callback) #100 hz
 
         self.state = TELEOP #init
         
