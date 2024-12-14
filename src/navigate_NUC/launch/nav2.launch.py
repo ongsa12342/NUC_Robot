@@ -147,20 +147,22 @@ def generate_launch_description():
         launch_arguments={'namespace': namespace,
                           'use_namespace': use_namespace,
                           'rviz_config': rviz_config_file}.items())
-
     bringup_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(launch_dir, 'bringup_launch.py')),
-        launch_arguments={'namespace': namespace,
-                          'use_namespace': use_namespace,
-                          'slam': slam,
-                          'map': map_yaml_file,
-                          'use_sim_time': use_sim_time,
-                          'params_file': params_file,
-                          'autostart': autostart,
-                          'use_composition': use_composition,
-                          'use_respawn': use_respawn,
-                          }.items())
+        launch_arguments={
+            'namespace': namespace,
+            'use_namespace': use_namespace,
+            'slam': slam,
+            'map': map_yaml_file,
+            'use_sim_time': use_sim_time,
+            'params_file': params_file,
+            'autostart': autostart,
+            'use_composition': use_composition,
+            'use_respawn': use_respawn,
+        }.items(),
+)
+
 
 #  # Command to dynamically sync time for stamp
 #     initial_pose_command = [

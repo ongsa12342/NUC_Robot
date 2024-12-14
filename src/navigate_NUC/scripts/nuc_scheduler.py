@@ -2,7 +2,7 @@
 
 import os
 import yaml
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped,Twist
 from navigate_NUC.dummy_module import dummy_function, dummy_var
 from rclpy.node import Node
 import rclpy
@@ -12,7 +12,11 @@ from nuc_interfaces.srv import SetPoseStamped  # Assuming a custom Pose service 
 from ament_index_python.packages import get_package_share_directory
 from nav2_simple_commander.robot_navigator import BasicNavigator
 
+TRUE = SetBool.Request()
+TRUE.data = True
 
+FALSE = SetBool.Request()
+FALSE.data = False
 
 # State define here
 
@@ -23,6 +27,11 @@ NAVIGATING = 2
 # MANUAL
 TELEOP = 4
 
+def is_cmd_vel(msg):
+    # Threshold for velocity components
+    threshold = 0.01
+    return abs(msg.linear.x) > threshold or abs(msg.linear.y) > threshold or abs(msg.linear.z) > threshold or \
+           abs(msg.angular.x) > threshold or abs(msg.angular.y) > threshold or abs(msg.angular.z) > threshold
 
 class NUC_Scheduler(Node):
     def __init__(self):
@@ -33,29 +42,39 @@ class NUC_Scheduler(Node):
         self.navigator = BasicNavigator()
 
         self.goal_pose = PoseStamped()
+        
+        # pub
+        self.cmd_vel_pub = self.create_publisher(Twist, '/robot/cmd_vel', 10)
 
+    
         # Services
         self.create_service(SetBool, 'is_nuc_auto', self.handle_is_nuc_auto)
         self.create_service(SetPoseStamped, 'nuc_goal_pose', self.handle_nuc_goal_pose)
-        
-        self.timer = self.create_timer(100, self.timer_callback) #100 hz
+        self.is_cmd_auto = self.create_client(SetBool, 'is_cmd_auto')
         self.timer = self.create_timer(1/100, self.timer_callback) #100 hz
 
         self.state = TELEOP #init
+        self.is_cmd_auto.call_async(FALSE)
+        
+        self.cmd_flag = False
+        self.cmd_vel_value = Twist()
         
         self.get_logger().info('NUC Scheduler Node is up and running.')
+        
 
+            
     def handle_is_nuc_auto(self, request, response):
         """Service handler for is_nuc_auto."""
         is_auto_mode = request.data
         CMD_VEL = 0 # waut for joy
         if is_auto_mode:
             if self.state == TELEOP:
-                if CMD_VEL == 0:
+                if CMD_VEL > 0:
                     response.success = False
                     self.get_logger().info("Please wait until robot stop!!!")
                 else:
                     response.success = True
+                    self.is_cmd_auto.call_async(TRUE)
                     self.state = WAITING_FOR_NAVIGATE
                     self.get_logger().info("Changed to Autonomous mode")
                     
@@ -68,12 +87,14 @@ class NUC_Scheduler(Node):
                 self.get_logger().info("Can not change to Autonomous mode")
         else:
             if self.state == WAITING_FOR_NAVIGATE:
+                
+                self.is_cmd_auto.call_async(FALSE)
                 self.state = TELEOP
                 response.success = True
                 self.get_logger().info("Changed to Manual mode")
             elif self.state == TELEOP:
                 
-                response.success = True
+                response.success = False
                 self.get_logger().info("Now is already Manual mode")
                 
             else:
@@ -114,12 +135,15 @@ class NUC_Scheduler(Node):
             )
             
             #sent to nav goal here
+            self.state = NAVIGATING
+            # self.navigator.waitUntilNav2Active()
             
-            self.get_logger().info("dummy sent pose here")
-            # self.navigator.goToPose(goal_pose)
+            self.navigator.goToPose(self.goal_pose)
+            
+            self.get_logger().info("Sending Goal pose")
             
             response.success = True
-            self.state = NAVIGATING
+            
             
         elif self.state == NAVIGATING:
             response.success = False
@@ -128,16 +152,21 @@ class NUC_Scheduler(Node):
             response.success = False
             self.get_logger().info("Can not Navigate in this mode")
 
+        # self.get_logger().info(f"Current state: {self.state}")
         
         return response
     def FSM(self):
         if self.state == NAVIGATING:
-            # result = self.navigator.getResult()
-            result = True
+            
+            if self.navigator.isTaskComplete() or True:
+                result = self.navigator.getResult()
+                # result = True
+                # self.get_logger().info(f"{result.value}")
 
-            if result:
-                self.get_logger().info('Goal Successed')
-                self.state = WAITING_FOR_NAVIGATE
+                if result.value == 1:
+                    self.get_logger().info('goal succeeded')
+                    self.is_cmd_auto.call_async(TRUE)
+                    self.state = WAITING_FOR_NAVIGATE
         
             
             

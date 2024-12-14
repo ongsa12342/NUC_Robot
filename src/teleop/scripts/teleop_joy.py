@@ -10,7 +10,7 @@ class JoyControlNode(Node):
     def __init__(self):
         super().__init__('joy_control_node')
         self.joy_sub = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
-        self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.cmd_vel_pub = self.create_publisher(Twist, '/joy/cmd_vel', 10)
 
         # Initialize velocity variables
         self.linear_velocity = 1.0
