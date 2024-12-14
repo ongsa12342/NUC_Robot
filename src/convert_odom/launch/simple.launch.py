@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     ekf_launch_path = os.path.join(
-        get_package_share_directory('convert_odom'), 'launch', 'ekf.launch.py'
+        get_package_share_directory('robot_localization'), 'launch', 'ekf.launch.py'
         )
     point_to_laser_launch_path = os.path.join(
         get_package_share_directory('convert_odom'), 'launch', 'custom_pointcloud_to_laserscan_launch.py'

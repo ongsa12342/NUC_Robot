@@ -28,6 +28,8 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   scripts/dummy_script.py
+  scripts/send_nav_goals.py
+  scripts/nuc_scheduler.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -45,6 +47,11 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(DIRECTORY params/
+  DESTINATION share/${PROJECT_NAME}/params
+)
+
+
 ################ INSTALL LAUNCH, ETC #################
 install(DIRECTORY
   # add directories here
@@ -53,6 +60,7 @@ install(DIRECTORY
   config
   launch
   map
+  scripts
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()

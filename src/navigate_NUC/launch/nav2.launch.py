@@ -16,8 +16,8 @@ def generate_launch_description():
     navigate_dir  = get_package_share_directory('navigate_NUC')
     
     launch_dir = os.path.join(bringup_dir, 'launch')
-    map_file_path = os.path.join(navigate_dir, 'map', 'last_map2.yaml')
-    nav2_file_path = os.path.join(navigate_dir,'params', 'nav2.yaml')
+    map_file_path = os.path.join(navigate_dir, 'params', 'last_map2.yaml')
+    nav2_file_path = os.path.join(navigate_dir,'params', 'nav2_big.yaml')
     rviz_file_path = os.path.join(navigate_dir,'config', 'nav2_rviz.rviz')
 
     # Create the launch configuration variables
@@ -38,12 +38,12 @@ def generate_launch_description():
     use_rviz = LaunchConfiguration('use_rviz')
     headless = LaunchConfiguration('headless')
     world = LaunchConfiguration('world')
-    pose = {'x': LaunchConfiguration('x_pose', default='-2.00'),
-            'y': LaunchConfiguration('y_pose', default='-0.50'),
-            'z': LaunchConfiguration('z_pose', default='0.01'),
+    pose = {'x': LaunchConfiguration('x_pose', default='0.865780289346655'),
+            'y': LaunchConfiguration('y_pose', default='13.394790542383607'),
+            'z': LaunchConfiguration('z_pose', default='0.0'),
             'R': LaunchConfiguration('roll', default='0.00'),
             'P': LaunchConfiguration('pitch', default='0.00'),
-            'Y': LaunchConfiguration('yaw', default='0.00')}
+            'Y': LaunchConfiguration('yaw', default='-0.743905714044924')}
     robot_name = LaunchConfiguration('robot_name')
     robot_sdf = LaunchConfiguration('robot_sdf')
 
@@ -159,8 +159,43 @@ def generate_launch_description():
                           'params_file': params_file,
                           'autostart': autostart,
                           'use_composition': use_composition,
-                          'use_respawn': use_respawn}.items())
+                          'use_respawn': use_respawn,
+                          }.items())
 
+#  # Command to dynamically sync time for stamp
+#     initial_pose_command = [
+#         'bash', '-c',
+#         '''
+#         current_time=$(date +%s)
+#         current_nanosec=$(date +%N)
+#         ros2 topic pub --once /initialpose geometry_msgs/PoseWithCovarianceStamped "{
+#           header: {
+#             stamp: {sec: $current_time, nanosec: $current_nanosec},
+#             frame_id: 'map'
+#           },
+#           pose: {
+#             pose: {
+#               position: {x: 0.8668771982192993, y: 13.156049728393555, z: 0.0},
+#               orientation: {x: 0.0, y: 0.0, z: -0.6972712629422345, w: 0.7168073561808229}
+#             },
+#             covariance: [
+#               0.25, 0.0, 0.0, 0.0, 0.0, 0.0,
+#               0.0, 0.25, 0.0, 0.0, 0.0, 0.0,
+#               0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+#               0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+#               0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+#               0.0, 0.0, 0.0, 0.0, 0.0, 0.06853891909122467
+#             ]
+#           }
+#         }"
+#         '''
+#     ]
+
+#     # Define ExecuteProcess to publish initial pose
+#     initial_pose_publisher = ExecuteProcess(
+#         cmd=initial_pose_command,
+#         output='screen'
+#     )
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -189,5 +224,7 @@ def generate_launch_description():
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(rviz_cmd)
     ld.add_action(bringup_cmd)
+    # ld.add_action(initial_pose_publisher)
+
 
     return ld

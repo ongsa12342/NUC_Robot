@@ -41,7 +41,7 @@
   <joint name="lidar_imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="lidar_imu_link"/>
-    <origin xyz="0 0 0.335" rpy="0 0 -0.2"/> <!-- Adjust lidar_imu position (centered on base) -->
+    <origin xyz="0 0 0.335" rpy="0 0 -0.392"/> <!-- Adjust lidar_imu position (centered on base) -->
   </joint>
 
   <!-- Front Left Wheel -->

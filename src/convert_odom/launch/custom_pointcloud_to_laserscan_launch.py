@@ -20,7 +20,7 @@ def generate_launch_description():
             name='static_transform_publisher',
             arguments=[
                 '0', '0', '0',  # x, y, z
-                '0', '0', '-0.2', '1',  # Quaternion qx, qy, qz, qw
+                '0', '0', '-0.195', '0.981',  # Quaternion qx, qy, qz, qw
                 'base_link',  # Parent frame
                 'unilidar_lidar'  # Child frame
             ]
