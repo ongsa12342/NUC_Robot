@@ -11,6 +11,7 @@ import os
 from std_srvs.srv import SetBool
 from nuc_interfaces.srv import SetPoseStamped
 from geometry_msgs.msg import PoseWithCovarianceStamped
+from PyQt5.QtWidgets import QSpacerItem, QSizePolicy
 
 TRUE = SetBool.Request()
 TRUE.data = True
@@ -142,36 +143,50 @@ class MainWindow(QMainWindow):
         # Central widget
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        layout = QVBoxLayout()
-
-        # Room selection label
-        layout.addWidget(QLabel("Select a Room:", alignment=Qt.AlignCenter))
-
-        # Room buttons
-        self.room_group = QButtonGroup()
-        for idx, room in enumerate(self.ros_node.room_coordinates):
-            button = QPushButton(f"Room: {room.get('name', 'Unknown')}")
-            button.clicked.connect(lambda _, r=room: self.select_room(r))
-            self.room_group.addButton(button)
-            layout.addWidget(button)
+        self.layout = QVBoxLayout()
 
         # Home button
-        home_button = QPushButton("Set Home")
-        home_button.clicked.connect(self.set_home)
-        layout.addWidget(home_button)
+        self.home_button = QPushButton("Set Home")
+        self.home_button.clicked.connect(self.set_home)
+        self.layout.addWidget(self.home_button)
 
         # Mode toggle buttons
-        layout.addWidget(QLabel("Mode Selection:", alignment=Qt.AlignCenter))
+        self.layout.addWidget(QLabel("Mode Selection:", alignment=Qt.AlignCenter))
 
         self.manual_button = QRadioButton("Manual")
         self.manual_button.setChecked(True)
         self.manual_button.toggled.connect(self.toggle_mode)
-        layout.addWidget(self.manual_button)
+        self.layout.addWidget(self.manual_button)
 
         self.auto_button = QRadioButton("Auto")
-        layout.addWidget(self.auto_button)
+        self.layout.addWidget(self.auto_button)
 
-        central_widget.setLayout(layout)
+        central_widget.setLayout(self.layout)
+
+        # Room buttons (added dynamically in Auto mode)
+        self.room_buttons = []
+        self.create_room_buttons()
+        self.update_buttons_visibility()
+
+        spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.layout.addItem(spacer)
+
+    def create_room_buttons(self):
+        for idx, room in enumerate(self.ros_node.room_coordinates):
+            button = QPushButton(f"Room: {room.get('name', 'Unknown')}")
+            button.clicked.connect(lambda _, r=room: self.select_room(r))
+            self.room_buttons.append(button)
+            self.layout.addWidget(button)
+
+    def update_buttons_visibility(self):
+        is_auto = self.auto_button.isChecked()
+        for button in self.room_buttons:
+            button.setVisible(is_auto)
+        self.home_button.setVisible(True)
+
+        # Update layout to adjust dynamically
+        self.layout.update()
+
 
     def select_room(self, room):
         if 'position' not in room or 'orientation' not in room:
@@ -198,6 +213,7 @@ class MainWindow(QMainWindow):
         # Prevent re-triggering toggle if mode change fails
         self.manual_button.blockSignals(True)
         self.auto_button.blockSignals(True)
+
         if not self.ros_node.set_mode(is_auto):
             QMessageBox.critical(self, "Mode Change Failed", "Unable to change mode. Please try again.")
             # Revert the toggle state
@@ -205,6 +221,9 @@ class MainWindow(QMainWindow):
                 self.manual_button.setChecked(True)
             else:
                 self.auto_button.setChecked(True)
+        else:
+            self.update_buttons_visibility()
+
         self.manual_button.blockSignals(False)
         self.auto_button.blockSignals(False)
 
