@@ -18,7 +18,7 @@ def generate_launch_description():
         executable='micro_ros_agent',
         name='micro_ros_agent_serial',
         output='screen',
-        arguments=['serial', '--dev', '/dev/ttyACM0', '-b', '921600']
+        arguments=['serial', '--dev', '/dev/ttyACM1', '-b', '921600']
     )
 
     teleop_joy_action = Node(
@@ -28,13 +28,19 @@ def generate_launch_description():
         output='screen'
     )
 
-    teleop_twist_joy_action = Node(
-        package='teleop_twist_joy',
-        executable='teleop_node',
-        name='teleop_twist_joy',
+    # teleop_twist_joy_action = Node(
+    #     package='teleop_twist_joy',
+    #     executable='teleop_node',
+    #     name='teleop_twist_joy',
+    #     output='screen'
+    # )
+
+
+    teleop_twist_joy_action = ExecuteProcess(
+        cmd=['ros2', 'launch', 'teleop_twist_joy', 'teleop-launch.py'],
         output='screen'
     )
-
+    
     nuc_scheduler_action = ExecuteProcess(
         cmd=['ros2', 'run', 'navigate_NUC', 'nuc_scheduler.py'],
         output='screen'
@@ -79,6 +85,11 @@ def generate_launch_description():
         ]
     )
 
+    teleop_encode_node = Node(
+        package='convert_odom',
+        executable='teleop_encode.py',
+        name='teleop_encode',
+    )
     point_to_laser_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(point_to_laser_launch_path)
     )
@@ -98,5 +109,8 @@ def generate_launch_description():
     ld.add_action(time_sync_node)
     ld.add_action(tf)
     ld.add_action(point_to_laser_launch)
+    ld.add_action(teleop_encode_node)
+
+    
 
     return ld
