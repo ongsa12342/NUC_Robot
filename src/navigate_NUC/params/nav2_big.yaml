@@ -209,7 +209,7 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.05
+      xy_goal_tolerance: 0.02
       yaw_goal_tolerance: 0.05
     FollowPath:
       # Model Predictive Path Integral Controller
@@ -217,27 +217,27 @@ controller_server:
       time_steps: 15
       model_dt: 0.2 # Set to the duration of the control frequency
       batch_size: 10000
-      vx_std: 0.2
-      vy_std: 0.2
-      wz_std: 0.4
+      vx_std: 0.3
+      vy_std: 0.3
+      wz_std: 0.3
 
       vx_max: 0.5 # These acceleration and velocity parameters are where you should start tuning
       vx_min: -0.5 # -0.35 is default
       vy_max: 0.5
       vy_min: -0.5
 
-      wz_max: 1.5
-      wz_min: -1.5
+      wz_max: 1.0
+      wz_min: -1.0
 
-      ax_max: 1.2
-      ax_min: -1.2
-      ay_max: 1.2
-      ay_min: -1.2
-      az_max: 1.5
-      az_min: -1.5
+      ax_max: 1.0
+      ax_min: -1.0
+      ay_max: 1.0
+      ay_min: -1.0
+      az_max: 0.7
+      az_min: -0.7
 
       iteration_count: 1
-      prune_distance: 1.7
+      prune_distance: 0.5
       transform_tolerance: 0.05
       temperature: 0.3
       gamma: 0.015
@@ -268,13 +268,13 @@ controller_server:
       GoalCritic:
         enabled: true
         cost_power: 1
-        cost_weight: 5.0
-        threshold_to_consider: 1.4
+        cost_weight: 9.0
+        threshold_to_consider: 1.5
       GoalAngleCritic:
         enabled: true
         cost_power: 1
         cost_weight: 3.0
-        threshold_to_consider: 0.5
+        threshold_to_consider: 0.3
       PathAlignCritic:
         enabled: true
         cost_power: 1
