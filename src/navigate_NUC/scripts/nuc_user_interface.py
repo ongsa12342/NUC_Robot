@@ -66,15 +66,26 @@ class NucUserInterface(Node):
         pose_msg.pose.pose.position.x = position['x']
         pose_msg.pose.pose.position.y = position['y']
         pose_msg.pose.pose.position.z = 0.0
-        pose_msg.pose.pose.orientation.x = 0.0
-        pose_msg.pose.pose.orientation.y = 0.0
-        pose_msg.pose.pose.orientation.z = orientation.get('z', 0.0)
-        pose_msg.pose.pose.orientation.w = orientation['w']
-        pose_msg.pose.covariance = [0.0] * 36
+
+        # Normalize quaternion
+        magnitude = (orientation['z']**2 + orientation['w']**2)**0.5
+        pose_msg.pose.pose.orientation.z = orientation['z'] / magnitude
+        pose_msg.pose.pose.orientation.w = orientation['w'] / magnitude
+
+        # Covariance matrix
+        pose_msg.pose.covariance = [
+            0.25, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.25, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        ]
 
         pose_msg.header.stamp = self.get_clock().now().to_msg()
         self.initial_pose_pub.publish(pose_msg)
         self.get_logger().info(f"Published initial pose: position={position}, orientation={orientation}")
+
 
     def send_goal_pose(self, position, orientation):
         request = SetPoseStamped.Request()
