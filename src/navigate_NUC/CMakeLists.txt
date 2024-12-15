@@ -30,6 +30,7 @@ install(PROGRAMS
   scripts/dummy_script.py
   scripts/send_nav_goals.py
   scripts/nuc_scheduler.py
+  scripts/nuc_user_interface.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

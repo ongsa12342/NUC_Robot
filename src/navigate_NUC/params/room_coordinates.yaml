@@ -30,13 +30,3 @@ rooms:
   - name: "308"
     x: -6.2
     y: 6.0
-    # orientation_w: 1.0
-  - name: "1"
-    x: 2.7
-    y: 11.0
-    # orientation_w: 1.0
-  - name: "2"
-    x: 2.7
-    y: 12.0
-    # orientation_w: 1.0
-
