@@ -35,6 +35,11 @@ def generate_launch_description():
         output='screen'
     )
 
+    nuc_scheduler_action = ExecuteProcess(
+        cmd=['ros2', 'run', 'navigate_NUC', 'nuc_scheduler.py'],
+        output='screen'
+    )
+
     ekf_launch_path = os.path.join(
         get_package_share_directory('robot_localization'), 'launch', 'ekf.launch.py'
     )
@@ -86,6 +91,7 @@ def generate_launch_description():
     ld.add_action(uros_action)
     ld.add_action(teleop_joy_action)
     ld.add_action(teleop_twist_joy_action)
+    ld.add_action(nuc_scheduler_action)
     ld.add_action(ekf_launch)
     ld.add_action(Filter_LP_node)
     ld.add_action(convert_odom_type_node)
