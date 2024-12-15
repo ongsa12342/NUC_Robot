@@ -28,7 +28,9 @@ class NucUserInterface(Node):
         # Service clients
         self.is_nuc_auto = self.create_client(SetBool, 'is_nuc_auto')
         self.nuc_goal_pose = self.create_client(SetPoseStamped, '/nuc_goal_pose')
-        self.client = self.create_client(PoseWithCovarianceStamped, '/set_pose')
+
+        # Publisher for initial pose
+        self.initial_pose_pub = self.create_publisher(PoseWithCovarianceStamped, '/initialpose', 10)
 
         # Locate the YAML file in the 'param' directory of the package
         yaml_file = os.path.join(
@@ -59,15 +61,19 @@ class NucUserInterface(Node):
             return False
 
     def pose_estimate(self, position, orientation):
-        request = PoseWithCovarianceStamped()
-        # Set position and orientation
-        request.pose.pose.position.x = position['x']
-        request.pose.pose.position.y = position['y']
-        request.pose.pose.orientation.z = orientation.get('z', 0.0)
-        request.pose.pose.orientation.w = orientation['w']
-        # Set covariance (optional)
-        request.pose.covariance = [0.0] * 36
-        self.future = self.client.call_async(request)
+        pose_msg = PoseWithCovarianceStamped()
+        pose_msg.header.frame_id = "map"
+        pose_msg.pose.pose.position.x = position['x']
+        pose_msg.pose.pose.position.y = position['y']
+        pose_msg.pose.pose.position.z = 0.0
+        pose_msg.pose.pose.orientation.x = 0.0
+        pose_msg.pose.pose.orientation.y = 0.0
+        pose_msg.pose.pose.orientation.z = orientation.get('z', 0.0)
+        pose_msg.pose.pose.orientation.w = orientation['w']
+        pose_msg.pose.covariance = [0.0] * 36
+
+        self.initial_pose_pub.publish(pose_msg)
+        self.get_logger().info(f"Published initial pose: position={position}, orientation={orientation}")
 
     def send_goal_pose(self, position, orientation):
         request = SetPoseStamped.Request()
@@ -106,7 +112,7 @@ class NucUserInterface(Node):
 
     def get_home_data(self):
         for room in self.room_coordinates:
-            if room.get('home') == 'home':
+            if room["name"] == 'home':
                 return {
                     'position': room['position'],
                     'orientation': room['orientation']
