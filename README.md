@@ -5,6 +5,10 @@ This repository contains the setup and launch instructions for the NUC_Robot pro
 ```
 git clone https://github.com/ongsa12342/NUC_Robot.git
 ```
+### Step x:
+```
+rosdep update && rosdep install --from-paths src --ignore-src -y
+```
 ### Step 2: Build the Package
 Navigate to the cloned repository and build it using `colcon`:
 ```
