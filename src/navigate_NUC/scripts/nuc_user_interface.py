@@ -55,22 +55,22 @@ class NucUserInterface(Node):
             self.get_logger().error("Service 'is_nuc_auto' not available.")
             return False
 
-    def send_goal_pose(self, x, y, orientation_w=1.0):
+    def send_goal_pose(self, position, orientation):
         request = SetPoseStamped.Request()
-        request.pose.position.x = x
-        request.pose.position.y = y
+        request.pose.position.x = position['x']
+        request.pose.position.y = position['y']
         request.pose.position.z = 0.0
         request.pose.orientation.x = 0.0
         request.pose.orientation.y = 0.0
-        request.pose.orientation.z = 0.0
-        request.pose.orientation.w = orientation_w
+        request.pose.orientation.z = orientation.get('z', 0.0)
+        request.pose.orientation.w = orientation['w']
 
         if self.nuc_goal_pose.wait_for_service(timeout_sec=1.0):
             future = self.nuc_goal_pose.call_async(request)
             rclpy.spin_until_future_complete(self, future)
             if future.result() is not None:
                 if future.result().success:
-                    self.get_logger().info(f"Goal pose sent successfully: x={x}, y={y}, orientation_w={orientation_w}")
+                    self.get_logger().info(f"Goal pose sent successfully: position={position}, orientation={orientation}")
                 else:
                     self.get_logger().error("Failed to send goal pose: " + future.result().message)
             else:
@@ -83,8 +83,8 @@ class NucUserInterface(Node):
             with open(yaml_file, 'r') as file:
                 data = yaml.safe_load(file)
                 for room in data['rooms']:
-                    if 'orientation_w' not in room:
-                        room['orientation_w'] = 1.0
+                    if 'position' not in room or 'orientation' not in room:
+                        self.get_logger().warning(f"Room {room.get('name', 'Unknown')} is missing position or orientation data.")
                 return data['rooms']
         except FileNotFoundError:
             self.get_logger().error(f"YAML file not found: {yaml_file}")
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         # Room buttons
         self.room_group = QButtonGroup()
         for idx, room in enumerate(self.ros_node.room_coordinates):
-            button = QPushButton(f"Room {idx + 1}: {room['name']}")
+            button = QPushButton(f"Room: {room.get('name', 'Unknown')}")
             button.clicked.connect(lambda _, r=room: self.select_room(r))
             self.room_group.addButton(button)
             layout.addWidget(button)
@@ -127,8 +127,14 @@ class MainWindow(QMainWindow):
         central_widget.setLayout(layout)
 
     def select_room(self, room):
-        self.ros_node.get_logger().info(f"Selected Room: {room['name']} (x: {room['x']}, y: {room['y']}, orientation_w: {room['orientation_w']})")
-        self.ros_node.send_goal_pose(room['x'], room['y'], room['orientation_w'])
+        if 'position' not in room or 'orientation' not in room:
+            QMessageBox.warning(self, "Room Selection Failed", f"Cannot select room: {room.get('name', 'Unknown')}. Missing position or orientation.")
+            return
+
+        position = room['position']
+        orientation = room['orientation']
+        self.ros_node.get_logger().info(f"Selected Room: {room.get('name', 'Unknown')} (position: {position}, orientation: {orientation})")
+        self.ros_node.send_goal_pose(position, orientation)
 
     def toggle_mode(self):
         is_auto = self.auto_button.isChecked()
