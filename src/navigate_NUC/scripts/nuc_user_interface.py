@@ -230,15 +230,51 @@ class MainWindow(QMainWindow):
             self.room_buttons.append(button)
             self.layout.addWidget(button)
 
+    def show_pose_dialog(self, room):
+        if 'position' not in room or 'orientation' not in room:
+            QMessageBox.warning(self, "Show Pose", "Position or orientation data is missing for this room.")
+            return
+
+        position = room['position']
+        orientation = room['orientation']
+        
+        # Create the message to display
+        message = (
+            f"Room: {room.get('name', 'Unknown')}\n\n"
+            f"Position:\n"
+            f"  x: {position.get('x', 'N/A')}\n"
+            f"  y: {position.get('y', 'N/A')}\n\n"
+            f"Orientation:\n"
+            f"  z: {orientation.get('z', 'N/A')}\n"
+            f"  w: {orientation.get('w', 'N/A')}"
+        )
+
+        QMessageBox.information(self, "Room Pose", message)
+
+
     def show_context_menu(self, button, room):
         menu = QMenu(self)
+
+        # Add "Show Pose" action
+        show_pose_action = QAction("Show Pose", self)
+        show_pose_action.triggered.connect(lambda: self.show_pose_dialog(room))
+        menu.addAction(show_pose_action)
+
+        # Add "Go to Pose" action
+        go_to_pose_action = QAction("Go to Pose", self)
+        go_to_pose_action.triggered.connect(lambda: self.select_room(room))
+        menu.addAction(go_to_pose_action)
+
+        # Add "Delete Room" action
         delete_action = QAction("Delete Room", self)
         delete_action.triggered.connect(lambda: self.delete_room(button, room))
         menu.addAction(delete_action)
-        
-        # Properly use QCursor for the global position
+
+        # Show the context menu
         global_pos = button.mapToGlobal(button.rect().center())
         menu.exec_(global_pos)
+
+
 
 
 
