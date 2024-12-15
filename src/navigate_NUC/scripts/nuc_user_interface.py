@@ -10,6 +10,7 @@ import yaml
 import os
 from std_srvs.srv import SetBool
 from nuc_interfaces.srv import SetPoseStamped
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 TRUE = SetBool.Request()
 TRUE.data = True
@@ -27,7 +28,8 @@ class NucUserInterface(Node):
         # Service clients
         self.is_nuc_auto = self.create_client(SetBool, 'is_nuc_auto')
         self.nuc_goal_pose = self.create_client(SetPoseStamped, '/nuc_goal_pose')
-
+        self.client = self.create_client(PoseWithCovarianceStamped, '/set_pose')
+        
         # Locate the YAML file in the 'param' directory of the package
         yaml_file = os.path.join(
             get_package_share_directory('navigate_NUC'),  # Replace with your package name
@@ -54,6 +56,17 @@ class NucUserInterface(Node):
         else:
             self.get_logger().error("Service 'is_nuc_auto' not available.")
             return False
+        
+    def pose_estimate(self):
+        request = PoseWithCovarianceStamped()
+        # Set position and orientation
+        request.pose.pose.position.x = 1.0
+        request.pose.pose.position.y = 2.0
+        request.pose.pose.orientation.z = 0.707
+        request.pose.pose.orientation.w = 0.707
+        # Set covariance (optional)
+        request.pose.covariance = [0.0] * 36
+        self.future = self.client.call_async(request)
 
     def send_goal_pose(self, position, orientation):
         request = SetPoseStamped.Request()
