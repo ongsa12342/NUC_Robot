@@ -222,13 +222,16 @@ class MainWindow(QMainWindow):
         self.layout.addItem(spacer)
 
     def create_room_buttons(self):
+        reference_widget = self.auto_button  # Replace with your 'Set Home' widget variable
+        reference_index = self.layout.indexOf(reference_widget)
         for idx, room in enumerate(self.ros_node.room_coordinates):
             button = QPushButton(f"Room: {room.get('name', 'Unknown')}")
             button.setContextMenuPolicy(Qt.CustomContextMenu)
             button.customContextMenuRequested.connect(lambda pos, b=button, r=room: self.show_context_menu(b, r))
             button.clicked.connect(lambda _, r=room: self.select_room(r))
             self.room_buttons.append(button)
-            self.layout.addWidget(button)
+            self.layout.insertWidget(reference_index + idx + 1, button)
+            
 
     def show_pose_dialog(self, room):
         if 'position' not in room or 'orientation' not in room:
@@ -321,8 +324,23 @@ class MainWindow(QMainWindow):
         self.ros_node.get_logger().info(f"Setting Home: position={position}, orientation={orientation}")
         self.ros_node.pose_estimate(position, orientation)
 
+    def reload_yaml_and_update_buttons(self):
+        # Reload the room coordinates from the YAML file
+        self.ros_node.room_coordinates = self.ros_node.load_coordinates()
+
+        # Remove existing room buttons
+        for button in self.room_buttons:
+            button.setParent(None)
+        self.room_buttons.clear()
+
+        # Recreate room buttons with updated data
+        self.create_room_buttons()
+    
+
+
     def toggle_mode(self):
         is_auto = self.auto_button.isChecked()
+
         # Prevent re-triggering toggle if mode change fails
         self.manual_button.blockSignals(True)
         self.auto_button.blockSignals(True)
@@ -336,6 +354,8 @@ class MainWindow(QMainWindow):
                 self.auto_button.setChecked(True)
         else:
             self.update_buttons_visibility()
+            if is_auto:
+                self.reload_yaml_and_update_buttons()
 
         self.manual_button.blockSignals(False)
         self.auto_button.blockSignals(False)
