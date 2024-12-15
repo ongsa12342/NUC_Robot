@@ -29,7 +29,7 @@ class NucUserInterface(Node):
         self.is_nuc_auto = self.create_client(SetBool, 'is_nuc_auto')
         self.nuc_goal_pose = self.create_client(SetPoseStamped, '/nuc_goal_pose')
         self.client = self.create_client(PoseWithCovarianceStamped, '/set_pose')
-        
+
         # Locate the YAML file in the 'param' directory of the package
         yaml_file = os.path.join(
             get_package_share_directory('navigate_NUC'),  # Replace with your package name
@@ -37,6 +37,7 @@ class NucUserInterface(Node):
             'room_coordinates.yaml'  # YAML file name
         )
         self.room_coordinates = self.load_coordinates(yaml_file)
+        self.home_data = self.get_home_data()
 
     def set_mode(self, auto_mode):
         request = TRUE if auto_mode else FALSE
@@ -56,14 +57,14 @@ class NucUserInterface(Node):
         else:
             self.get_logger().error("Service 'is_nuc_auto' not available.")
             return False
-        
-    def pose_estimate(self):
+
+    def pose_estimate(self, position, orientation):
         request = PoseWithCovarianceStamped()
         # Set position and orientation
-        request.pose.pose.position.x = 1.0
-        request.pose.pose.position.y = 2.0
-        request.pose.pose.orientation.z = 0.707
-        request.pose.pose.orientation.w = 0.707
+        request.pose.pose.position.x = position['x']
+        request.pose.pose.position.y = position['y']
+        request.pose.pose.orientation.z = orientation.get('z', 0.0)
+        request.pose.pose.orientation.w = orientation['w']
         # Set covariance (optional)
         request.pose.covariance = [0.0] * 36
         self.future = self.client.call_async(request)
@@ -103,6 +104,16 @@ class NucUserInterface(Node):
             self.get_logger().error(f"YAML file not found: {yaml_file}")
             return []
 
+    def get_home_data(self):
+        for room in self.room_coordinates:
+            if room.get('home') == 'home':
+                return {
+                    'position': room['position'],
+                    'orientation': room['orientation']
+                }
+        self.get_logger().error("Home data not found in YAML.")
+        return None
+
 class MainWindow(QMainWindow):
     def __init__(self, ros_node):
         super().__init__()
@@ -126,6 +137,11 @@ class MainWindow(QMainWindow):
             self.room_group.addButton(button)
             layout.addWidget(button)
 
+        # Home button
+        home_button = QPushButton("Set Home")
+        home_button.clicked.connect(self.set_home)
+        layout.addWidget(home_button)
+
         # Mode toggle buttons
         layout.addWidget(QLabel("Mode Selection:", alignment=Qt.AlignCenter))
 
@@ -148,6 +164,16 @@ class MainWindow(QMainWindow):
         orientation = room['orientation']
         self.ros_node.get_logger().info(f"Selected Room: {room.get('name', 'Unknown')} (position: {position}, orientation: {orientation})")
         self.ros_node.send_goal_pose(position, orientation)
+
+    def set_home(self):
+        if not self.ros_node.home_data:
+            QMessageBox.critical(self, "Home Data Missing", "Home data is not available in the YAML file.")
+            return
+
+        position = self.ros_node.home_data['position']
+        orientation = self.ros_node.home_data['orientation']
+        self.ros_node.get_logger().info(f"Setting Home: position={position}, orientation={orientation}")
+        self.ros_node.pose_estimate(position, orientation)
 
     def toggle_mode(self):
         is_auto = self.auto_button.isChecked()
