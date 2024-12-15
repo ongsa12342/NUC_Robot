@@ -72,6 +72,7 @@ class NucUserInterface(Node):
         pose_msg.pose.pose.orientation.w = orientation['w']
         pose_msg.pose.covariance = [0.0] * 36
 
+        pose_msg.header.stamp = self.get_clock().now().to_msg()
         self.initial_pose_pub.publish(pose_msg)
         self.get_logger().info(f"Published initial pose: position={position}, orientation={orientation}")
 
