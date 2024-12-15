@@ -1,0 +1,3 @@
+geometry_msgs/Pose pose  # Input: PoseStamped to set
+---
+bool success                   # Output: Was the operation successful
