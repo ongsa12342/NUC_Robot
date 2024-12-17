@@ -41,8 +41,18 @@ Launch the GUI for user interaction:
 ```
 ros2 run navigate_NUC nuc_user_interface.py
 ```
+## GUI
+[Placeholder for GUI]
+about....
+
+
+## Teleop
+### joy teleop
+
+
+# Extentions
 ## Running the Unitree LiDAR
-To launch the Unitree LiDAR with ROS 2:
+To launch the Unitree LiDAR:
 ```
 ros2 launch unitree_lidar_ros2 launch.py
 ```
@@ -55,12 +65,22 @@ rviz2 -d src/unitree_lidar_ros2/rviz/view.rviz
 ```
 ros2 launch lidarslam lidarslam.launch.py
 ```
-run bag file
+Run a bag file for map collection
 ```
 ros2 bag play data
 ```
-# Nav2 Launch 
+## Nav2 Launch 
 ```
 ros2 launch convert_odom simple.launch.py 
 ros2 launch convert_odom nav2.launch.py 
 ```
+# System Architecture
+
+# Validation
+
+### Acknowledgments
+This project relies on the following libraries and tools:
+ - robot_localization - For state estimation and sensor fusion.
+ - unitree_lidar - Integration and support for Unitree LiDAR sensors.
+ - micro-ROS - ROS 2 framework for microcontrollers.
+ - Nav2 - Navigation stack for autonomous robots.
