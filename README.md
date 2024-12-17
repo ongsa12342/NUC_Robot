@@ -45,9 +45,12 @@ ros2 run navigate_NUC nuc_user_interface.py
 [Placeholder for GUI]
 about....
 
-
+## Navigation
+### Map
 ## Teleop
+
 ### joy teleop
+
 
 
 # Extentions
