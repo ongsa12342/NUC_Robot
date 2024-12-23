@@ -1,41 +1,46 @@
 
-# NUC_Robot
+# NUC_Robot Validation
 
-This repository contains the setup and launch instructions for the NUC_Robot project, which includes support for the Unitree LiDAR sensor.
+This repository contains the setup and instructions method for validate the NUC_Robot position with realsense camera
+
+<video controls src="470704536_8675603952517412_4196081051933534043_n.mp4" title="Title"></video>
 
 ## Installation and Setup
 
 ### Step 1: Clone the Repository
 ```
-git clone https://github.com/ongsa12342/NUC_Robot.git
+git clone https://github.com/ongsa12342/NUC_Robot.git -b validation
 ```
 
-### Step 2: Build the Package
-Navigate to the cloned repository and build it using `colcon`:
-```
-cd NUC_Robot && colcon build
-```
+### Step 2: Make sure your already have this library on you device
+- python 3.10.11 (for realsense camera)
+- pyrealsense2 (for realsense camera)
+- opencv python
+- matplot lib
 
-### Step 3: Source the Setup File
-To set up the environment, source the following:
-```
-source ~/NUC_Robot/install/setup.bash
-```
+### Step 3: Config to fit your environment
+To set up the environment, config the following:
 
-### Step 4: (Optional) Add to .bashrc
-For convenience, you may want to add the setup file to your `.bashrc`:
-```
-echo "source ~/NUC_Robot/install/setup.bash" >> ~/.bashrc && source ~/.bashrc
-```
+- camera
 
-## Running the Unitree LiDAR
-To launch the Unitree LiDAR with ROS 2:
-```
-ros2 launch unitree_lidar_ros2 launch.py
-```
+![alt text](image.png)
 
-### Visualize in RViz
-To open RViz with a preset configuration for the Unitree LiDAR:
+- camera matrix and dish_coeffs
+
+![alt text](image-1.png)
+
+- aruco type and size 
+
+![alt text](image-2.png)
+
+
+### Step 4: Running the validation code
 ```
-rviz2 -d src/unitree_lidar_ros2/rviz/view.rviz
+python Realsense_aruco.py
 ```
+### 
+
+
+
+
+
