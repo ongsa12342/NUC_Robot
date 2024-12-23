@@ -3,7 +3,7 @@
 
 This repository contains the setup and instructions method for validate the NUC_Robot position with realsense camera
 
-<video controls src="470704536_8675603952517412_4196081051933534043_n.mp4" title="Title"></video>
+<video controls src="imageandvideo/470704536_8675603952517412_4196081051933534043_n.mp4" title="Title"></video>
 
 ## Installation and Setup
 
@@ -23,15 +23,15 @@ To set up the environment, config the following:
 
 - camera
 
-![alt text](image.png)
+![alt text](imageandvideo/image.png)
 
 - camera matrix and dish_coeffs
 
-![alt text](image-1.png)
+![alt text](imageandvideo/image-1.png)
 
 - aruco type and size 
 
-![alt text](image-2.png)
+![alt text](imageandvideo/image-2.png)
 
 
 ### Step 4: Running the validation code
