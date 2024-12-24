@@ -146,6 +146,11 @@ ros2 bag play data
 ros2 launch convert_odom simple.launch.py 
 ros2 launch convert_odom nav2.launch.py 
 ```
+
+### Future Plan
+
+We will explore ways to improve the robot's localization accuracy by researching localization techniques, sensor fusion, and SLAM
+
 ### Acknowledgments
 This project relies on the following libraries and tools:
  - robot_localization - For state estimation and sensor fusion.
