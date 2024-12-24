@@ -1,0 +1,10 @@
+lattice_parameters:
+  num_poses: 8
+  turn_in_place_primitive: true
+  forward_arc_primitives: 5
+  reverse_arc_primitives: 3
+  max_velocity: 1.0
+  max_angular_velocity: 1.0
+  resolution: 0.05
+  turning_radius: 0.3
+  path_resolution: 0.02
