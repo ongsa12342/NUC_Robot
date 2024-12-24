@@ -1,4 +1,4 @@
-# NUC_Robot
+![image](https://github.com/user-attachments/assets/b77db130-a92a-4085-a4e5-722ce1002820)# NUC_Robot
 This repository provides the setup and launch instructions for the NUC_Robot project, an omni-directional drive robot equipped with a Unitree LiDAR sensor. The robot utilizes the NAV2 framework for autonomous navigation and includes a mode-switching feature that allows seamless transitions between teleoperation(Manual) and navigation to goal(Auto).
 
 
@@ -114,6 +114,12 @@ This package manages input devices for controlling the robot:
 
 # Validation
 
+The source code and usage instructions are provided in the `Validation` branch
+
+
+https://github.com/user-attachments/assets/45dccd1d-701b-4f95-9d32-96d47707a340
+
+From the trajectory results from a 1×1 m path, with an error margin of within 0.2 m.
 
 
 # Extentions CLI
