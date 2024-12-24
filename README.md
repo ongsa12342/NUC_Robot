@@ -152,6 +152,9 @@ ros2 launch convert_odom nav2.launch.py
 We will explore ways to improve the robot's localization accuracy by researching localization techniques, sensor fusion, and SLAM
 
 ### Acknowledgments
+This project is part of the coursework for FRA501 Robotics Dev at the Institute of Field Robotics, King Mongkut’s University of Technology Thonburi. Special thanks to the course instructors for their guidance and support.
+Feel free to explore, modify, and extend this project for educational and research purposes.
+
 This project relies on the following libraries and tools:
  - robot_localization - For state estimation and sensor fusion.
  - unitree_lidar - Integration and support for Unitree LiDAR sensors.
