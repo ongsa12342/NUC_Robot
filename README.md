@@ -21,8 +21,7 @@ Navigate to the cloned repository and build it using `colcon`:
 ```
 cd NUC_Robot && colcon build
 ```
-### Step 4: Source the Setup File
-To set up the environment, source the following:
+ To set up the environment, source the following:
 ```
 source ~/NUC_Robot/install/setup.bash
 ```
